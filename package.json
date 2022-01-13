@@ -1,0 +1,41 @@
+{
+  "name": "tickket-backbone",
+  "version": "1.0.0",
+  "description": "This is the official Node.js backend project for the tickket platform",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config src/index.ts",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enchird-entity/tickket-backbone.git"
+  },
+  "keywords": [
+    "tickket",
+    "bus",
+    "travel"
+  ],
+  "author": "Enchird Technologies",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enchird-entity/tickket-backbone/issues"
+  },
+  "homepage": "https://github.com/enchird-entity/tickket-backbone#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.13",
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "mongoose": "^6.1.6",
+    "morgan": "^1.10.0"
+  }
+}
