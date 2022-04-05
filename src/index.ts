@@ -3,12 +3,15 @@ import mongoose from "mongoose";
 import cors from "cors";
 import bodyParser from "body-parser";
 import morgan from "morgan";
-import userRouter from "./controllers/user.controller";
+import userRouter from "./routes/user.routes";
 import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
+import helmet from "helmet";
+import csrf from "csurf";
+import { userAgent } from "./middleware";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5100;
 
 Sentry.init({
   dsn: process.env.SENTRY_DNS,
@@ -35,25 +38,48 @@ mongoose
     console.log("[SERVER] Unable to Connect to database!");
   });
 
-// SENTRY RequestHandler creates a separate execution context using domains, so that every
-// transaction/span/breadcrumb is attached to its own Hub instance
+// ===================================== MIDDLEWARE ========================================
+
+/** SENTRY RequestHandler creates a separate execution context using domains, so that every
+ * transaction/span/breadcrumb is attached to its own Hub instance
+ * */
 app.use(Sentry.Handlers.requestHandler());
-// TracingHandler creates a trace for every incoming request
+/**
+ * TracingHandler creates a trace for every incoming request
+ */
 app.use(Sentry.Handlers.tracingHandler());
 
-// Cors
+/**
+ * Cors Headers middle-ware
+ */
 app.use(cors());
-// Parse application/x-www-form-urlencoded
+/**
+ * Parse application/x-www-form-urlencoded
+ */
 app.use(bodyParser.urlencoded({ extended: true }));
-// Parse application/json
+/**
+ * Parse application/json
+ */
 app.use(bodyParser.json());
-// Logger
+/**
+ * Helmet protects the app from some well-known web vulnerabilities
+ * by setting HTTP headers appropriately.
+ */
+app.use(helmet());
+/**
+ * Block Cross-Site Request Forgeries
+ */
+app.use(csrf());
+/**
+ * User Agent middleware
+ */
+app.use(userAgent);
+/**
+ * Log each request to the console
+ */
 app.use(morgan("dev"));
 
-/**
- *
- * ==== Routes ===
- */
+// ===================================== ROUTES ========================================
 app.use("/users", userRouter);
 
 // The error handler must be before any other error middleware and after all controllers
