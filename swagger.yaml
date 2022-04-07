@@ -1,0 +1,194 @@
+swagger: "2.0"
+info:
+  description: "Node.js Open API Swagger documentation"
+  version: "1.0.0"
+  title: "Project Open Api"
+host: "localhost:5100"
+basePath: "/"
+tags:
+  - name: "users"
+    description: "User's routes"
+schemes:
+  - "http"
+paths:
+  /users:
+    post:
+      tags:
+        - "user"
+      summary: "Add a new user"
+      description: ""
+      operationId: "addUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Add an user to the database"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "201":
+          description: "The resource was created"
+        "400":
+          description: "Invalid input"
+    get:
+      tags:
+        - "user"
+      summary: "List of agencies"
+      description: ""
+      operationId: "listUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "limit"
+          in: "query"
+          required: false
+          type: "number"
+        - name: "page"
+          in: "query"
+          required: false
+          type: "number"
+        - name: "search"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        "200":
+          description: "Operation completed successfully"
+          schema:
+            type: "object"
+            properties:
+              data:
+                type: "array"
+                items:
+                  $ref: "#/definitions/ListUsersResponse"
+        "400":
+          description: "Invalid username/password supplied"
+  /users/{id}:
+    put:
+      tags:
+        - "user"
+      summary: "Replace an existing user"
+      description: ""
+      operationId: "replaceUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the user to be replaced"
+          required: true
+          type: "string"
+          format: "uuid"
+        - in: "body"
+          name: "body"
+          description: "User object that should be replaced"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "204":
+          description: "Successfully replaced"
+        "400":
+          description: "InvalidValidation exception"
+        "404":
+          description: "Document not found"
+        "500":
+          description: "Internal Server Error"
+    patch:
+      tags:
+        - "user"
+      summary: "Update an existing user"
+      description: ""
+      operationId: "updateUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the user to be replaced"
+          required: true
+          type: "string"
+          format: "uuid"
+        - in: "body"
+          name: "body"
+          description: "User object that should be replaced"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
+      responses:
+        "204":
+          description: "Successfully updated"
+        "400":
+          description: "InvalidValidation exception"
+        "404":
+          description: "Document not found"
+        "500":
+          description: "Internal Server Error"
+    get:
+      tags:
+        - "user"
+      summary: "Find user by ID"
+      description: "Returns a single user"
+      operationId: "getUserById"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the user be to returned"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        "200":
+          description: "Operation completed successfully"
+          schema:
+            type: "object"
+            properties:
+              data:
+                $ref: "#/definitions/User"
+        "404":
+          description: "Document not found"
+    delete:
+      tags:
+        - "user"
+      summary: "Deletes a user"
+      description: ""
+      operationId: "deleteUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "User id to be deleted"
+          required: true
+          type: "string"
+          format: "uuid"
+      responses:
+        "204":
+          description: "Successfully replaced"
+        "404":
+          description: "Document not found"
+definitions:
+  User:
+    type: "object"
+    required:
+      - "name"
+    properties:
+      name:
+        type: "string"
+        example: "Hubert Formin"
+      email:
+        type: "string"
+        example: "hformin@gmail.com"
+      phoneNumber:
+        type: "string"
+        example: "+237681376338"

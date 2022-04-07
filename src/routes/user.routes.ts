@@ -9,7 +9,7 @@ router.get("/", async (req: HttpRequest, res: Response) => {
   try {
     // Get users
     const users = await User.find();
-    // Get Operating system
+    // Get requesting device Operating system
     console.log(req.userAgent.os);
 
     // The response object
