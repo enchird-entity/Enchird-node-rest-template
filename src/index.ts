@@ -8,6 +8,8 @@ import * as Sentry from "@sentry/node";
 import * as Tracing from "@sentry/tracing";
 import helmet from "helmet";
 import csrf from "csurf";
+import * as swaggerUi from "swagger-ui-express";
+import * as YAML from "yamljs";
 import { userAgent } from "./middleware";
 
 const app = express();
@@ -73,7 +75,7 @@ app.use(csrf());
 /**
  * User Agent middleware
  */
-app.use(userAgent);
+app.use(userAgent());
 /**
  * Log each request to the console
  */
@@ -81,6 +83,13 @@ app.use(morgan("dev"));
 
 // ===================================== ROUTES ========================================
 app.use("/users", userRouter);
+
+// Swagger documentation route
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(YAML.load("./swagger.yaml"))
+);
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
