@@ -12,11 +12,9 @@ import { HttpRequest } from "../models/http.model";
  * by using the @package ua-parser-js.
  * @see https://www.npmjs.com/package/ua-parser-js
  */
-export default function userAgent(
-  req: HttpRequest,
-  res: Response,
-  next: NextFunction
-) {
-  req.userAgent = UAParser(req.headers["user-agent"]);
-  next();
+export default function userAgent() {
+  return function (req: HttpRequest, res: Response, next: NextFunction) {
+    req.userAgent = UAParser(req.headers["user-agent"]);
+    next();
+  };
 }
